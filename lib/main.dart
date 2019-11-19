@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './text_output.dart';
+import './color_loader.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'BetApp'),
     );
   }
 }
@@ -49,6 +50,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List data;
 
+  bool show = false;
+
+  bool showLoader = false;
+
+  List<Color> colors = [
+    // Colors.red,
+    // Colors.green,
+    // Colors.indigo,
+    // Colors.pinkAccent,
+    Colors.blue
+  ];
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -56,18 +69,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future fetchPost() async {
+    setState(() {
+      showLoader = true;
+    });
     final response =
         await http.get('https://jsonplaceholder.typicode.com/posts');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       setState(() {
+        showLoader = false;
         data = (json.decode(response.body)).sublist(0, 10);
       });
+      print(response.body);
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
+  }
+
+  void _showFunc() {
+    setState(() {
+      show = !show;
+    });
   }
 
   @override
@@ -84,13 +108,26 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             TextOutput(_counter),
+            Visibility(
+              child: ListTile(
+                leading: Icon(Icons.map),
+                title: Text('Map'),
+              ),
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: show,
+            ),
             RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
-            data != null
-                ? ListTile(
-                    leading: Icon(Icons.map),
-                    title: Text('Map'),
-                  )
-                : Container(),
+            RaisedButton(child: Text('Show'), onPressed: _showFunc),
+            Visibility(
+              child: ColorLoader(
+                  colors: colors, duration: Duration(milliseconds: 1200)),
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: showLoader,
+            ),
           ],
         ),
       ),
