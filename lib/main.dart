@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './text_output.dart';
+import './team_row.dart';
 import './color_loader.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'BetApp'),
+      home: MyHomePage(title: 'DemoApp'),
     );
   }
 }
@@ -53,6 +53,21 @@ class _MyHomePageState extends State<MyHomePage> {
   bool show = false;
 
   bool showLoader = false;
+
+  final utile = TextEditingController();
+
+  final sessionImport = TextEditingController();
+
+  final sessionExport = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    utile.addListener(() => print(utile.text));
+    sessionImport.addListener(() => print(sessionImport.text));
+    sessionExport.addListener(() => print(sessionExport.text));
+  }
 
   List<Color> colors = [
     // Colors.red,
@@ -104,37 +119,110 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'UTILE',
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 178.0),
+                    child: TextField(
+                      controller: utile,
+                      decoration: InputDecoration(
+                        //Add th Hint text here.
+                        hintText: "Utile",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            TextOutput(_counter),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'IMPORT',
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextField(
+                      controller: sessionImport,
+                      decoration: InputDecoration(
+                        //Add th Hint text here.
+                        hintText: "Session import",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 50.0),
+                  child:
+                      RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'EXPORT',
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextField(
+                      controller: sessionExport,
+                      decoration: InputDecoration(
+                        //Add th Hint text here.
+                        hintText: "Session Export",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 50.0),
+                  child:
+                      RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+                ),
+              ],
+            ),
+            RaisedButton(child: Text('Show'), onPressed: _showFunc),
+
+            // Text(
+            //   'You have pushed the button this many times:',
+            // ),
+            // TeamRow(_counter),
+
             Visibility(
-              child: ListTile(
-                leading: Icon(Icons.map),
-                title: Text('Map'),
-              ),
+              child: TeamRow((e) => print(e)),
               maintainSize: true,
               maintainAnimation: true,
               maintainState: true,
               visible: show,
             ),
-            RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
-            RaisedButton(child: Text('Show'), onPressed: _showFunc),
-            Visibility(
-              child: ColorLoader(
-                  colors: colors, duration: Duration(milliseconds: 1200)),
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              visible: showLoader,
-            ),
+            // RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+            // Visibility(
+            //   child: ColorLoader(
+            //       colors: colors, duration: Duration(milliseconds: 1200)),
+            //   maintainSize: true,
+            //   maintainAnimation: true,
+            //   maintainState: true,
+            //   visible: showLoader,
+            // ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
