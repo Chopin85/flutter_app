@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 
 class TeamRow extends StatelessWidget {
   // final _counter;
-  Function setPair;
+  final bool select;
+  final Function setPair;
+  final String team;
 
-  TeamRow(this.setPair);
+  TeamRow(this.setPair, this.select, this.team);
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: select ? Colors.green : Colors.red,
       child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            setPair('ok');
+            setPair();
           },
           child: ListTile(
-            leading: Icon(Icons.album, size: 50),
-            title: Text('Heart Shaker'),
-            subtitle: Text('TWICE'),
+            title: Text(team),
           )),
     );
   }

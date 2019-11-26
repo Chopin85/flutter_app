@@ -50,9 +50,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List data;
 
-  bool show = false;
+  bool show = true;
+
+  bool pair = false;
 
   bool showLoader = false;
+
+  List teamData = [
+    {'team': 'Inter', 'quota': 3.2, 'pair': false},
+    {'team': 'Naples', 'quota': 3.5, 'pair': false}
+  ];
+
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
 
   final utile = TextEditingController();
 
@@ -106,8 +116,34 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showFunc() {
     setState(() {
       show = !show;
+      print('ok');
     });
   }
+
+  void _setPair() {
+    setState(() {
+      pair = !pair;
+    });
+  }
+
+  void _testFunc(team) {
+    // setState(() {
+    //   teamData.add({'team': team, 'quota': quota, 'pair': pair});
+    // });
+    int findIndex = teamData.indexWhere((e) => e['team'] == team);
+
+    setState(() {
+      teamData[findIndex]['pair'] = !teamData[findIndex]['pair'];
+    });
+
+    print(teamData[findIndex]['pair']);
+  }
+
+// Widget _buildSuggestions() {
+//   return ListView.builder(
+//     itemCount: ,
+//       itemBuilder: teamData.map(e => Text(e.team)));
+// }
 
   @override
   Widget build(BuildContext context) {
@@ -119,85 +155,85 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'UTILE',
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 178.0),
-                    child: TextField(
-                      controller: utile,
-                      decoration: InputDecoration(
-                        //Add th Hint text here.
-                        hintText: "Utile",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'IMPORT',
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextField(
-                      controller: sessionImport,
-                      decoration: InputDecoration(
-                        //Add th Hint text here.
-                        hintText: "Session import",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 50.0),
-                  child:
-                      RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'EXPORT',
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextField(
-                      controller: sessionExport,
-                      decoration: InputDecoration(
-                        //Add th Hint text here.
-                        hintText: "Session Export",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 50.0),
-                  child:
-                      RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: <Widget>[
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //       child: Text(
+            //         'UTILE',
+            //       ),
+            //     ),
+            //     Flexible(
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(left: 20.0, right: 178.0),
+            //         child: TextField(
+            //           controller: utile,
+            //           decoration: InputDecoration(
+            //             //Add th Hint text here.
+            //             hintText: "Utile",
+            //             border: OutlineInputBorder(),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   children: <Widget>[
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //       child: Text(
+            //         'IMPORT',
+            //       ),
+            //     ),
+            //     Flexible(
+            //       child: Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //         child: TextField(
+            //           controller: sessionImport,
+            //           decoration: InputDecoration(
+            //             //Add th Hint text here.
+            //             hintText: "Session import",
+            //             border: OutlineInputBorder(),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 20.0, right: 50.0),
+            //       child:
+            //           RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   children: <Widget>[
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //       child: Text(
+            //         'EXPORT',
+            //       ),
+            //     ),
+            //     Flexible(
+            //       child: Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //         child: TextField(
+            //           controller: sessionExport,
+            //           decoration: InputDecoration(
+            //             //Add th Hint text here.
+            //             hintText: "Session Export",
+            //             border: OutlineInputBorder(),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 20.0, right: 50.0),
+            //       child:
+            //           RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+            //     ),
+            //   ],
+            // ),
             RaisedButton(child: Text('Show'), onPressed: _showFunc),
 
             // Text(
@@ -205,13 +241,38 @@ class _MyHomePageState extends State<MyHomePage> {
             // ),
             // TeamRow(_counter),
 
-            Visibility(
-              child: TeamRow((e) => print(e)),
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              visible: show,
-            ),
+            // Text(teamData[0]['team']),
+
+            show
+                ? new Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: teamData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            child: TeamRow(
+                                () => _testFunc(teamData[index]['team']),
+                                teamData[index]['pair'],
+                                teamData[index]['team']),
+                            // height: 50,
+                            // color: Colors.amber[colorCodes[index]],
+                            // child: Center(child: Text('Entry ${entries[index]}')),
+                          );
+                        }))
+                : Container(),
+
+            // Visibility(
+            //   child: Column(
+            //     children: <Widget>[
+            //       TeamRow(_setPair, pair),
+            //       TeamRow(_setPair, pair),
+            //     ],
+            //   ),
+            //   maintainSize: true,
+            //   maintainAnimation: true,
+            //   maintainState: true,
+            //   visible: show,
+            // ),
             // RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
             // Visibility(
             //   child: ColorLoader(
