@@ -57,8 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showLoader = false;
 
   List teamData = [
-    {'team': 'Inter', 'quota': 3.2, 'pair': false},
-    {'team': 'Naples', 'quota': 3.5, 'pair': false}
+    {'team': 'Inter', 'quota': 3.2, 'pair': false, 'bet': false},
+    {'team': 'Naples', 'quota': 3.5, 'pair': false, 'bet': false}
   ];
 
   final List<String> entries = <String>['A', 'B', 'C'];
@@ -127,9 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _testFunc(team) {
-    // setState(() {
-    //   teamData.add({'team': team, 'quota': quota, 'pair': pair});
-    // });
     int findIndex = teamData.indexWhere((e) => e['team'] == team);
 
     setState(() {
@@ -138,6 +135,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
     print(teamData[findIndex]['pair']);
   }
+
+  void _setBetTeam(bool valuen, team) {
+    int findIndex = teamData.indexWhere((e) => e['team'] == team);
+
+    setState(() {
+      teamData[findIndex]['bet'] = !teamData[findIndex]['bet'];
+    });
+
+    print(teamData[findIndex]['bet']);
+  }
+
+  // void _value2Changed(bool value) => print('okk');
 
 // Widget _buildSuggestions() {
 //   return ListView.builder(
@@ -252,8 +261,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           return Container(
                             child: TeamRow(
                                 () => _testFunc(teamData[index]['team']),
-                                teamData[index]['pair'],
-                                teamData[index]['team']),
+                                teamData[index],
+                                (e) => _setBetTeam(e, teamData[index]['team'])),
                             // height: 50,
                             // color: Colors.amber[colorCodes[index]],
                             // child: Center(child: Text('Entry ${entries[index]}')),
