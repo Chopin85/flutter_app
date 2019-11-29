@@ -27,22 +27,13 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class Post {
-  final int userId;
-  final int id;
-  final String title;
-  final String body;
+class Team {
+  final String team;
+  final double quota;
 
-  Post({this.userId, this.id, this.title, this.body});
+  Team({this.team, this.quota});
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-      body: json['body'],
-    );
-  }
+  result() => {'team': team, 'quota': quota, 'pair': false, 'bet': false};
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -50,16 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List data;
 
-  bool show = true;
+  bool show = false;
 
   bool pair = false;
 
   bool showLoader = false;
 
-  List teamData = [
-    {'team': 'Inter', 'quota': 3.2, 'pair': false, 'bet': false},
-    {'team': 'Naples', 'quota': 3.5, 'pair': false, 'bet': false}
-  ];
+  List teamData = [];
 
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
@@ -93,20 +81,37 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void addToList(String team, double quota) {
+    setState(() {
+      teamData.add(Team(team: team, quota: quota).result());
+    });
+    // print(teamData);
+  }
+
   Future fetchPost() async {
     setState(() {
       showLoader = true;
     });
+    teamData.clear();
     final response =
-        await http.get('https://jsonplaceholder.typicode.com/posts');
+        await http.get('http://10.0.2.2:3001/match/seriea/request?session=12');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
+      List result = json.decode(response.body)['match'];
+
+      result.forEach((element) => {
+            element['match']
+                .split("-")
+                .forEach((fruit) => addToList(fruit, element['quota']))
+          });
+
+      print(teamData.length);
+
       setState(() {
         showLoader = false;
-        data = (json.decode(response.body)).sublist(0, 10);
+        // data = (json.decode(response.body)).sublist(0, 2);
       });
-      print(response.body);
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
@@ -244,6 +249,8 @@ class _MyHomePageState extends State<MyHomePage> {
             //   ],
             // ),
             RaisedButton(child: Text('Show'), onPressed: _showFunc),
+            RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+            // RaisedButton(child: Text('Print'), onPressed: addToList),
 
             // Text(
             //   'You have pushed the button this many times:',
