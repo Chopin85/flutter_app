@@ -62,9 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    utile.addListener(() => print(utile.text));
-    sessionImport.addListener(() => print(sessionImport.text));
-    sessionExport.addListener(() => print(sessionExport.text));
+    // utile.addListener(() => print(utile.text));
+    // sessionImport.addListener(() => print(sessionImport.text));
+    // sessionExport.addListener(() => print(sessionExport.text));
   }
 
   List<Color> colors = [
@@ -88,25 +88,30 @@ class _MyHomePageState extends State<MyHomePage> {
     // print(teamData);
   }
 
-  Future fetchPost() async {
+  Future _fetchPost() async {
     setState(() {
       showLoader = true;
     });
     teamData.clear();
-    final response =
-        await http.get('http://10.0.2.2:3001/match/seriea/request?session=12');
+    final response = await http.get(
+        'http://10.0.2.2:3001/match/seriea/request?session=${sessionExport.text}');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
-      List result = json.decode(response.body)['match'];
 
-      result.forEach((element) => {
-            element['match']
-                .split("-")
-                .forEach((fruit) => addToList(fruit, element['quota']))
-          });
+      if (response.body == 'not find') {
+        print('ok');
+      } else {
+        List result = json.decode(response.body)['match'];
 
-      print(teamData.length);
+        result.forEach((element) => {
+              element['match']
+                  .split("-")
+                  .forEach((fruit) => addToList(fruit, element['quota']))
+            });
+
+        print(teamData.length);
+      }
 
       setState(() {
         showLoader = false;
@@ -220,36 +225,35 @@ class _MyHomePageState extends State<MyHomePage> {
             //     ),
             //   ],
             // ),
-            // Row(
-            //   children: <Widget>[
-            //     Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            //       child: Text(
-            //         'EXPORT',
-            //       ),
-            //     ),
-            //     Flexible(
-            //       child: Padding(
-            //         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            //         child: TextField(
-            //           controller: sessionExport,
-            //           decoration: InputDecoration(
-            //             //Add th Hint text here.
-            //             hintText: "Session Export",
-            //             border: OutlineInputBorder(),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.only(left: 20.0, right: 50.0),
-            //       child:
-            //           RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
-            //     ),
-            //   ],
-            // ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'EXPORT',
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextField(
+                      controller: sessionExport,
+                      decoration: InputDecoration(
+                        //Add th Hint text here.
+                        hintText: "Session Export",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 50.0),
+                    child: RaisedButton(
+                        child: Text('Fetch'), onPressed: _fetchPost)),
+              ],
+            ),
             RaisedButton(child: Text('Show'), onPressed: _showFunc),
-            RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
+            // RaisedButton(child: Text('Fetch'), onPressed: fetchPost),
             // RaisedButton(child: Text('Print'), onPressed: addToList),
 
             // Text(
