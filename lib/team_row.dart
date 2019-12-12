@@ -6,18 +6,14 @@ class TeamRow extends StatelessWidget {
   final Map team;
   final Function onBetTeam;
 
-  final int utile = 25;
-
   TeamRow(this.setPair, this.team, this.onBetTeam);
-
-  int _calcBet() {
-    return (utile / (team['quota'] - 1)).ceil();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: team['pair'] ? Colors.green : Colors.red,
+      color: team['isChecked']
+          ? Colors.green
+          : team['oldCash'] > 0 ? Colors.orange : Colors.red,
       child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
@@ -36,14 +32,15 @@ class TeamRow extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('${_calcBet().toString()} €'),
+                  child: Text('${team['cash'].toString()} €'),
                 ),
               ],
             ),
-            trailing: Checkbox(
-              value: team['bet'],
-              tristate: false,
+            trailing: Switch(
+              value: team['isAdd'],
               onChanged: onBetTeam,
+              // activeTrackColor: Colors.green,
+              activeColor: Colors.blue,
             ),
           )),
     );
